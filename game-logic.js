@@ -10,9 +10,10 @@ const Game = {
     },
 
     _generateMap: function() {
-        var digger = new ROT.Map.Digger();
+        const digger = new ROT.Map.Digger();
+        const freeCells = [];
 
-        var digCallback = function(x, y, value) {
+        const digCallback = function(x, y, value) {
             if (value) { return; } /* do not store walls */
             // var key = x+","+y;
             const key = `${x},${y}`
@@ -20,9 +21,17 @@ const Game = {
         }
         // .bind(this) ensures that our callback is called within a correct context 
         digger.create(digCallback.bind(this));
-        this._drawWholeMap()
-    },
 
+        this._generateBoxes(freeCells);
+        this._drawWholeMap();
+    },
+    _generateBoxes: function(freeCells) {
+        for (let i = 0; i < 10; i++) {
+            const index = Math.floor(ROT.RNG.getUniform() * freeCells.length);
+            const key = freeCells.splice(index, 1)[0];
+            this.map[key] = "*";
+        }
+    },
     _drawWholeMap: function() {
         for (let key in this.map) {
             const parts = key.split(",");
