@@ -17,7 +17,9 @@ const Game = {
             if (value) { return; } /* do not store walls */
             // var key = x+","+y;
             const key = `${x},${y}`
+            freeCells.push(key);
             this.map[key] = ".";
+
         }
         // .bind(this) ensures that our callback is called within a correct context 
         digger.create(digCallback.bind(this));
